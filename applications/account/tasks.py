@@ -13,3 +13,14 @@ def send_activation_code(user_email, code):
         config("EMAIL_HOST_USER"),
         [user_email]
     )
+    
+@app.task
+def send_recovery_code(user_email, code):
+    link = f"http://{config('SERVER_IP')}/api/v1/account/recovery/confirm/"
+    
+    send_mail(
+        "Recovery letter",
+        f"Here is your code - {code}\nFollow the link to recover your account: {link}",
+        config("EMAIL_HOST_USER"),
+        [user_email]
+    )
