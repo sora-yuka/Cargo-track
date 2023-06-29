@@ -11,7 +11,7 @@ from applications.account.tasks import send_activation_code
 User = get_user_model()
 
 
-class UserRegisterAPIView(CreateAPIView):
+class UserRegisterAPIView(APIView):
     permission_classes = [AllowAny]
     
     def post(self, request):
