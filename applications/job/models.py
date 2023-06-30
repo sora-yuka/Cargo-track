@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 from django.contrib.auth import get_user_model
 
@@ -14,12 +15,14 @@ class Job(models.Model):
     type_of_goods = models.CharField(max_length=100)
     required_equipment = models.CharField(max_length=200)
     special_instruction = models.TextField(null=True, blank=True)
+    activation_code = models.UUIDField(default=uuid.uuid4())
+    is_confirm = models.BooleanField(default=False)
     
     
     def __str__(self) -> str:
         return self.title
     
-    
+
     class Meta:
         verbose_name = "Job"
         verbose_name_plural = "Jobs"
