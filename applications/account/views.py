@@ -8,7 +8,7 @@ from django.contrib.auth import get_user_model
 from applications.account.models import Recovery
 from applications.account.tasks import send_activation_code
 from applications.account.serializers import (
-    UserRegisterSerializer, PasswordChangeSerializer,
+    CarrierRegisterSerializer, PasswordChangeSerializer,
     ForgotPasswordSerializer, ForgotPasswordConfirmSerializer,
     RecoverySerializer
 )
@@ -16,12 +16,12 @@ from applications.account.serializers import (
 User = get_user_model()
 
 
-class UserRegisterAPIView(APIView):
+class CarrierRegisterAPIView(APIView):
     permission_classes = [AllowAny]
     
     def post(self, request):
         try:
-            serializer = UserRegisterSerializer(data=request.data)
+            serializer = CarrierRegisterSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             user = serializer.save()
         except IntegrityError:
