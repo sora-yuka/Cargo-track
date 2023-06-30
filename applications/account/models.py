@@ -65,4 +65,13 @@ class CustomUser(AbstractUser):
         self.activation_code = str(uuid.uuid4())
         
     def __str__(self):
-        return str(self.email)
+        return self.email
+    
+
+class Recovery(models.Model):
+    email = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name="account_recovery")
+    password_requested = models.DateTimeField(null=True, blank=True)
+    recovery_code = models.CharField(max_length=8)
+    
+    def __str__(self):
+        return (self.email, self.password_requested, self.recovery_code)
