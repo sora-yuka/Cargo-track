@@ -10,3 +10,4 @@ drf-yasg
 django-filter
 django-cors-headers
 django-phonenumber-field
+coreapi
