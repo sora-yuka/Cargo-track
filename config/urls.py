@@ -22,7 +22,7 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 
 schema_view = get_schema_view(openapi.Info(
-    title = 'Cinematic',
+    title = 'Cargo',
     default_version = '1.0',
     description = 'API DOCS for Cargo',
     terms_of_service='https://policies.google.com/terms',
