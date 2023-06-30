@@ -47,32 +47,7 @@ class CarrierRegisterSerializer(serializers.ModelSerializer):
         return user
     
     
-class UserRegisterSerializer(serializers.ModelSerializer):
-    password_confirm = serializers.CharField(min_length=8, required=True, write_only=True)
-    
-    class Meta:
-        model = User
-        fields = [
-            "first_name", "last_name", "email", "password", 
-            "password_confirm", "phone", "billing_address",
-        ]
-    
-    def validate(self, attrs):
-        password = attrs.get("password")
-        password_confirm = attrs.pop("password_confirm")
-        billing_address = attrs.get("billing_address")
-        
-        if len(billing_address.split(",")) != 3:
-            raise serializers.ValidationError("Incoreect billing address")
-        
-        if password != password_confirm:
-            raise serializers.ValidationError("Password are not similar!")
-        return attrs
-    
-    def create(self, validated_data):
-        user = User.objects.create_user(**validated_data)
-        user.save()
-        return user
+
     
     
 class RecoverySerializer(serializers.ModelSerializer):
