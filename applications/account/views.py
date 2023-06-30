@@ -10,7 +10,7 @@ from applications.account.tasks import send_activation_code
 from applications.account.serializers import (
     CarrierRegisterSerializer, PasswordChangeSerializer,
     ForgotPasswordSerializer, ForgotPasswordConfirmSerializer,
-    RecoverySerializer
+    RecoverySerializer, UserRegisterSerializer
 )
 
 User = get_user_model()
@@ -22,6 +22,31 @@ class CarrierRegisterAPIView(APIView):
     def post(self, request):
         try:
             serializer = CarrierRegisterSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            user = serializer.save()
+        except IntegrityError:
+            return Response(
+                {
+                    "message": "Something get wrong, please, check the input",
+                    "status": status.HTTP_400_BAD_REQUEST,
+                }
+            )
+        
+        if user:
+            send_activation_code.delay(user.email, user.activation_code)
+            return Response(
+                "Registered successfully, we've sent verification code to your email.",
+                status = status.HTTP_201_CREATED,
+            )
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    
+class UserRegisterAPIView(APIView):
+    permission_classes = [AllowAny]
+    
+    def post(self, request):
+        try:
+            serializer = UserRegisterSerializer(data=request.data)
             serializer.is_valid(raise_exception=True)
             user = serializer.save()
         except IntegrityError:
