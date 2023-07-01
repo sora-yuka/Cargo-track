@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.pagination import PageNumberPagination
 from django_filters.rest_framework import DjangoFilterBackend
@@ -13,6 +14,11 @@ from rest_framework import status
 from applications.job.models import Job
 from applications.job.permissions import ShipperOnly
 from applications.job.serializers import JobOfferSerializer, JobSerializer
+
+
+def index(request):
+    return render(request, "template/index.html")
+
 
 
 class PaginationApiView(PageNumberPagination):
