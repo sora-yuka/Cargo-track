@@ -5,6 +5,14 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 class Job(models.Model):
+    
+    STATUS = (
+        ('Looking for shipper', 'Looking for shipper'),
+        ('Negotiations are underway', 'Negotiations are underway'),
+        ('Delivering', 'Delivering'),
+        ('Completed', 'Completed'),
+    )
+    
     title = models.CharField(max_length=100)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='jobs')
     pickup_location = models.CharField(max_length=200)
@@ -16,6 +24,10 @@ class Job(models.Model):
     required_equipment = models.CharField(max_length=200)
     special_instruction = models.TextField(null=True, blank=True)
     activation_code = models.UUIDField(default=uuid.uuid4())
+    complete_code = models.UUIDField(default=uuid.uuid4())
+    cancel_code = models.UUIDField(default=uuid.uuid4())
+    started_at = models.DateTimeField(null=True, blank=True)
+    status = models.CharField(max_length=100, choices=STATUS, default='Looking for shipper')
     is_confirm = models.BooleanField(default=False)
     
     
