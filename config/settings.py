@@ -51,7 +51,7 @@ INSTALLED_APPS = [
     
     # packages
     'applications.account',
-    'applications.profiles',
+    'appliactions.profiles'
     'applications.job',
 ]
 

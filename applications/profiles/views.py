@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 from rest_framework.viewsets import mixins, GenericViewSet
 
-from applications.profiles.models import UserProfile
+from applications.profiles.models import ShipperProfile
 from applications.profiles.permissions import IsProfileOwner
 from applications.profiles.serializers import ProfileSerializer
 

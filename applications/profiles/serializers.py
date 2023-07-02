@@ -1,10 +1,11 @@
 from rest_framework import serializers
-from applications.profiles.models import UserProfile
+from applications.profiles.models import ShipperProfile
 
 
 class ProfileSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.email')
+    
     class Meta:
-        model = UserProfile
+        model = ShipperProfile
         fields = '__all__'
         
