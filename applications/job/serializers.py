@@ -26,7 +26,7 @@ class JobOfferSerializer(serializers.ModelSerializer):
         email_shipper = instance.owner.email
         email_carrier = self.context['request'].user.email
         # send_email_to_owner.delay(email_shipper, email_carrier)
-        send_confirmation_email.delay(email_carrier, instance.activation_code, instance.cancel_code)
+        send_confirmation_email.delay(email_carrier, instance.activation_code, instance.cancel_code, instance.id)
         instance.status = 'Negotiations are underway'
         instance.save()
     

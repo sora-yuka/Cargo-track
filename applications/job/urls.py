@@ -10,7 +10,7 @@ router.register('', JobViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('<int:pk>/order/', JobOfferApiView.as_view()),
-    path('confirm/<uuid:code>/', JobConfirmApiView.as_view()),
-    path('complete/<uuid:code>/', JobCompleteApiView.as_view()),
-    path('cancel/<uuid:code>/', JobCanselApiView.as_view()),
+    path('<int:pk>/confirm/<uuid:code>/', JobConfirmApiView.as_view()),
+    path('<int:pk>/complete/<uuid:code>/', JobCompleteApiView.as_view()),
+    path('<int:pk>/cancel/<uuid:code>/', JobCanselApiView.as_view()),
     ]
