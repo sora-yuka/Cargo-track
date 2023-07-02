@@ -109,6 +109,9 @@ class ForgotPasswordAPIView(APIView):
     def post(self, request):
         serializer = ForgotPasswordSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        recovery_obj = Recovery.objects.filter(email=serializer.data.get("email"))
+        if recovery_obj.exists():
+            recovery_obj.delete()
         serializer.send_code()
         return Response(
             {
@@ -116,7 +119,7 @@ class ForgotPasswordAPIView(APIView):
                 "status": status.HTTP_200_OK,
             }
         )
-        
+            
 
 class ForgotPasswordConfirmAPIView(APIView):
     permission_classes = [AllowAny]
@@ -126,6 +129,7 @@ class ForgotPasswordConfirmAPIView(APIView):
         serializer.is_valid(raise_exception=True)
         code = serializer.data.get("code")
         email = get_object_or_404(Recovery, recovery_code=code).email
+        Recovery.objects.filter(recovery_code=code).delete()
         serializer.set_new_password(email)
         return Response(
             {
@@ -133,3 +137,5 @@ class ForgotPasswordConfirmAPIView(APIView):
                 "status": status.HTTP_200_OK,
             }
         )
+    
+    

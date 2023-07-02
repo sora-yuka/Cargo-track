@@ -120,20 +120,19 @@ class ForgotPasswordSerializer(serializers.Serializer):
     
     def send_code(self):
         email = self.validated_data.get("email")
-        user = User.objects.get(email=email)
         code = randint(0000_0000, 9999_9999)
         send_recovery_code.delay(user_email=email, code=code)
         recovery = Recovery.objects.create(
-            email=user, recovery_code=code, password_requested=timezone.now()
+            email=email, recovery_code=code, password_requested=timezone.now()
         )
         recovery.save()
-        
+
         
 class ForgotPasswordConfirmSerializer(serializers.Serializer):
     code = serializers.CharField(min_length=8, required=True)
     password = serializers.CharField(min_length=8, required=True)
     password_confirm = serializers.CharField(min_length=8, required=True)
-    
+   
     @staticmethod 
     def validate_code(code):
         if not Recovery.objects.filter(recovery_code=code).first():
@@ -155,7 +154,7 @@ class ForgotPasswordConfirmSerializer(serializers.Serializer):
             raise serializers.ValidationError("Password are not similar!")
         
         return attrs
-    
+        
     def set_new_password(self, email):
         user = User.objects.get(email=email)
         password = self.validated_data.get("password")

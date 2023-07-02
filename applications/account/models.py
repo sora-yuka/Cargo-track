@@ -69,7 +69,7 @@ class CustomUser(AbstractUser):
     
 
 class Recovery(models.Model):
-    email = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name="account_recovery")
+    email = models.EmailField()
     password_requested = models.DateTimeField(null=True, blank=True)
     recovery_code = models.CharField(max_length=8)
     
