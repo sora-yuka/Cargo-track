@@ -44,13 +44,8 @@ class UserManager(BaseUserManager):
 
 class CustomUser(AbstractUser):
     username = None
-    first_name = models.CharField(max_length=155)
-    last_name = models.CharField(max_length=155)
     email = models.EmailField(unique=True)
-    company = models.CharField(max_length=155, blank=True, null=True)
     phone = PhoneNumberField()
-    billing_address = models.CharField(max_length=155)
-    mc_dot_number = models.CharField(max_length=10, blank=True, null=True)
     password = models.CharField(max_length=155)
     is_active = models.BooleanField(default=False)
     activation_code = models.CharField(max_length=155)
@@ -66,7 +61,7 @@ class CustomUser(AbstractUser):
         
     def __str__(self):
         return self.email
-    
+
 
 class Recovery(models.Model):
     email = models.EmailField()
