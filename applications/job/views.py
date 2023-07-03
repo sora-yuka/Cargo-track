@@ -17,7 +17,7 @@ from applications.job.serializers import JobOfferSerializer, JobSerializer
 
 
 def index(request):
-    return render(request, "template/index.html")
+    return render(request, "applications/job/template/index.html")
 
 
 

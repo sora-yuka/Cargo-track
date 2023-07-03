@@ -25,3 +25,8 @@ class BaseProfileViewSet(
 class ShipperViewSet(BaseProfileViewSet):
     serializer_class = ShipperSerializer
     queryset = ShipperProfile.objects.all()
+    
+    
+class DriverViewSet(BaseProfileViewSet):
+    serializer_class = DriverSerializer
+    queryset = DriverProfile.objects.all()
