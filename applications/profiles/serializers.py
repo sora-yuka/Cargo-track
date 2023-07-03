@@ -1,11 +1,16 @@
 from rest_framework import serializers
-from applications.profiles.models import ShipperProfile
+from applications.profiles.models import ShipperProfile, DriverProfile
 
 
-class ProfileSerializer(serializers.ModelSerializer):
-    user = serializers.ReadOnlyField(source='user.email')
+class ShipperSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = ShipperProfile
-        fields = '__all__'
+        fields = "__all__"
         
+
+class DriverSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = DriverProfile
+        fields = "__all__"

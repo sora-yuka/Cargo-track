@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser, BaseUserManager
-from phonenumber_field.modelfields import PhoneNumberField
 
 
 class UserManager(BaseUserManager):
@@ -45,7 +44,6 @@ class UserManager(BaseUserManager):
 class CustomUser(AbstractUser):
     username = None
     email = models.EmailField(unique=True)
-    phone = PhoneNumberField()
     password = models.CharField(max_length=155)
     is_active = models.BooleanField(default=False)
     activation_code = models.CharField(max_length=155)

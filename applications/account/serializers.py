@@ -21,7 +21,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = User
-        fields = "__all__"
+        fields = ["email", "phone", "password", "password_confirm"]
     
     def validate(self, attrs):
         password = attrs.get("password")

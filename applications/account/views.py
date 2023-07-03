@@ -5,6 +5,7 @@ from rest_framework.permissions import AllowAny
 from django.shortcuts import get_object_or_404
 from django.db.utils import IntegrityError
 from django.contrib.auth import get_user_model
+from applications.profiles.models import ShipperProfile, DriverProfile
 from applications.account.models import Recovery
 from applications.account.tasks import send_activation_code
 from applications.account.serializers import (
@@ -16,7 +17,7 @@ from applications.account.serializers import (
 User = get_user_model()
 
     
-class UserRegisterAPIView(APIView):
+class ShipperRegisterAPIView(APIView):
     permission_classes = [AllowAny]
     
     def post(self, request):
@@ -34,6 +35,35 @@ class UserRegisterAPIView(APIView):
         
         if user:
             send_activation_code.delay(user.email, user.activation_code)
+            email = serializer.data.get("email")
+            ShipperProfile.objects.create(user=User.objects.get(email=email))
+            return Response(
+                "Registered successfully, we've sent verification code to your email.",
+                status = status.HTTP_201_CREATED,
+            )
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    
+class DriverRegisterAPIView(APIView):
+    permission_classes = [AllowAny]
+    
+    def post(self, request):
+        try:
+            serializer = UserRegisterSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            user = serializer.save()
+        except IntegrityError:
+            return Response(
+                {
+                    "message": "Something get wrong, please, check the input",
+                    "status": status.HTTP_400_BAD_REQUEST,
+                }
+            )
+        
+        if user:
+            send_activation_code.delay(user.email, user.activation_code)
+            email = serializer.data.get("email")
+            DriverProfile.objects.create(user=User.objects.get(email=email))
             return Response(
                 "Registered successfully, we've sent verification code to your email.",
                 status = status.HTTP_201_CREATED,
