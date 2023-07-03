@@ -14,10 +14,15 @@ class BaseProfile(models.Model):
     username = models.CharField(max_length=20, blank=True)
     first_name = models.CharField(max_length=155, null=True, blank=True)
     last_name = models.CharField(max_length=155, null=True, blank=True)
-    phone = PhoneNumberField()
+    phone = PhoneNumberField(blank=True, null=True)
     billing_address = models.CharField(max_length=155, null=True, blank=True)
     image = models.ImageField(upload_to='profile/images/', null=True, blank=True)
     bio = models.TextField(null=True, blank=True)
+    is_shipper = models.BooleanField(default=False, blank=True)
+    is_driver = models.BooleanField(default=False, blank=True)
+    is_company_dirver = models.BooleanField(default=False, blank=True)
+    is_company = models.BooleanField(default=False, blank=True)
+    
     
     def generate_default_username(self):
         return f"{self.user.id}"
@@ -32,31 +37,32 @@ class BaseProfile(models.Model):
     
 
 class ShipperProfile(BaseProfile):
-    is_shipper = models.BooleanField(default=True, blank=True)
+    shipper = models.BooleanField(default=True, blank=True)
     
 
 class DriverProfile(BaseProfile):
     mc_dot_number = models.CharField(max_length=10, null=True, blank=True)
-    is_driver = models.BooleanField(default=True, blank=True)
-    car = models.ForeignKey(CarInfo, on_delete=models.CASCADE, related_name="driver_car")
+    driver = models.BooleanField(default=True, blank=True)
+    car = models.ForeignKey(CarInfo, on_delete=models.CASCADE, related_name="driver_car", null=True, blank=True)
     
     
 class CompanyDriver(BaseProfile):
-    is_company_dirver = models.BooleanField(default=True, blank=True)
-    car = models.ForeignKey(CarInfo, on_delete=models.CASCADE, related_name="company_driver_car")
+    company_dirver = models.BooleanField(default=True, blank=True)
+    car = models.ForeignKey(CarInfo, on_delete=models.CASCADE, related_name="company_driver_car", null=True, blank=True)
     
     
 class CompanyProfile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="company_profile")
-    company = models.CharField(max_length=155, null=True, blank=True)
+    company_name = models.CharField(max_length=155, null=True, blank=True)
     registration_number = models.CharField(max_length=30, null=True, blank=True)
     company_license = models.TextField(null=True, blank=True)
-    company_license_file = models.FileField(upload_to=f"company license/license/{company}/", null=True, blank=True)
+    company_license_file = models.FileField(upload_to=f"company license/license/{company_name}/", null=True, blank=True)
     insurance_contract = models.TextField(null=True, blank=True)
-    insurance_contract_file = models.FileField(upload_to=f"campany contract/contract/{company}/", null=True, blank=True)
+    insurance_contract_file = models.FileField(upload_to=f"campany contract/contract/{company_name}/", null=True, blank=True)
     billing_address = models.CharField(max_length=155, null=True, blank=True)
     mc_dot_number = models.CharField(max_length=10, null=True, blank=True)
-    auto_park = models.ForeignKey(CarInfo, on_delete=models.CASCADE, related_name="company_autopark")
+    auto_park = models.ForeignKey(CarInfo, on_delete=models.CASCADE, related_name="company_autopark", null=True, blank=True)
+    company = models.BooleanField(default=True, blank=False)
     
     def __str__(self):
         return self.user.email
