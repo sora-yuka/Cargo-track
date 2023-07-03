@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'applications.account',
     'applications.profiles',
     'applications.job',
+    'applications.car',
 ]
 
 MIDDLEWARE = [
