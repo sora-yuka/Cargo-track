@@ -13,7 +13,7 @@ from applications.account.serializers import (
     RecoverySerializer, 
 )
 from applications.profiles.models import (
-    BaseProfile, ShipperProfile, DriverProfile
+    BaseProfile, ShipperProfile, DriverProfile, CompanyDriver, CompanyProfile
 )
 
 User = get_user_model()
@@ -66,6 +66,60 @@ class DriverRegisterAPIView(APIView):
             send_activation_code.delay(user.email, user.activation_code)
             email = serializer.data.get("email")
             DriverProfile.objects.create(user=User.objects.get(email=email), is_driver=True)
+            return Response(
+                "Registered successfully, we've sent verification code to your email.",
+                status = status.HTTP_201_CREATED,
+            )
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    
+class CompanyDriverRegisterAPIView(APIView):
+    permission_classes = [AllowAny]
+    
+    def post(self, request):
+        try:
+            serializer = UserRegisterSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            user = serializer.save()
+        except IntegrityError:
+            return Response(
+                {
+                    "message": "Something get wrong, please, check the input",
+                    "status": status.HTTP_400_BAD_REQUEST,
+                }
+            )
+        
+        if user:
+            send_activation_code.delay(user.email, user.activation_code)
+            email = serializer.data.get("email")
+            CompanyDriver.objects.create(user=User.objects.get(email=email), is_company_dirver=True)
+            return Response(
+                "Registered successfully, we've sent verification code to your email.",
+                status = status.HTTP_201_CREATED,
+            )
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    
+class CompanyRegisterAPIView(APIView):
+    permission_classes = [AllowAny]
+    
+    def post(self, request):
+        try:
+            serializer = UserRegisterSerializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
+            user = serializer.save()
+        except IntegrityError:
+            return Response(
+                {
+                    "message": "Something get wrong, please, check the input",
+                    "status": status.HTTP_400_BAD_REQUEST,
+                }
+            )
+        
+        if user:
+            send_activation_code.delay(user.email, user.activation_code)
+            email = serializer.data.get("email")
+            CompanyProfile.objects.create(user=User.objects.get(email=email), is_company_user=True)
             return Response(
                 "Registered successfully, we've sent verification code to your email.",
                 status = status.HTTP_201_CREATED,

@@ -20,8 +20,8 @@ class BaseProfile(models.Model):
     bio = models.TextField(null=True, blank=True)
     is_shipper = models.BooleanField(default=False, blank=True)
     is_driver = models.BooleanField(default=False, blank=True)
+    is_company_user = models.BooleanField(default=False, blank=True)
     is_company_dirver = models.BooleanField(default=False, blank=True)
-    is_company = models.BooleanField(default=False, blank=True)
     
     
     def generate_default_username(self):

@@ -11,24 +11,55 @@ class BaseSerializer(serializers.ModelSerializer):
         model = BaseProfile
         fields = "__all__"
         
-    def validate(self, attrs):
-        mc_dot_number = attrs.get("mc_dot_number")
-        billing_address = attrs.get("billing_address")
+    def update(self, instance, validated_data):
+        username = validated_data.get("username")
+        first_name = validated_data.get("first_name")
+        last_name = validated_data.get("last_name")
+        phone = validated_data.get("phone")
+        image = validated_data.get("image")
+        bio = validated_data.get("bio")
+        mc_dot_number = validated_data.get("mc_dot_number")
+        billing_address = validated_data.get("billing_address")
+        car = validated_data.get("car")
         
-        if (
-                not mc_dot_number.startswith("MC#") or len(mc_dot_number) != 9
-            ) and (
-                not mc_dot_number.startswith("DOT#") or len(mc_dot_number) != 10
-            ):
-            raise serializers.ValidationError("Incorrect MC/DOT number.")
-                
-        if len(billing_address.split(",")) != 3:
-            raise serializers.ValidationError("Incoreect billing address")
+        if username:
+            instance.username = username
         
-        if password != password_confirm:
-            raise serializers.ValidationError("Password are not similar!")
-        return attrs
+        if first_name:
+            instance.first_name = first_name
+
+        if last_name:
+            instance.last_name
         
+        if phone:
+            instance.phone = phone
+        
+        if image:
+            instance.image = image
+            
+        if bio:
+            instance.bio = bio
+            
+        if mc_dot_number:
+            if (
+                    not mc_dot_number.startswith("MC#") or len(mc_dot_number) != 9
+                ) and (
+                    not mc_dot_number.startswith("DOT#") or len(mc_dot_number) != 10
+                ):
+                raise serializers.ValidationError("Incorrect MC/DOT number.")
+            instance.mc_dot_number = mc_dot_number
+        
+        if billing_address:
+            if len(billing_address.split(",")) != 3:
+                raise serializers.ValidationError("Incoreect billing address")
+            instance.billing_address = billing_address
+        
+        if car:
+            instance.car = car
+        
+        instance.save()
+        return instance
+    
 
 class ShipperSerializer(BaseSerializer):
     
