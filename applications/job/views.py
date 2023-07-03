@@ -98,7 +98,8 @@ class JobCanselApiView(APIView):
         if job.is_confirm:
             job.is_confirm = False
             job.status = 'Looking for shipper' 
-            job.save(update_fields=['status', 'is_confirm'])
+            job.driver_id = ''
+            job.save(update_fields=['status', 'is_confirm', 'driver_id'])
             return Response({'message': 'This job was canceled'}, status=status.HTTP_200_OK)
         return Response({'message': 'You have already canceled this job'}, status=status.HTTP_404_NOT_FOUND)
     

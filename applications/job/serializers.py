@@ -20,13 +20,13 @@ class JobSerializer(serializers.ModelSerializer):
         return rep
         
         
-
 class JobOfferSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.id')
     
     class Meta:
         model = Job
         fields = '__all__'
+      
         
     def update(self, instance, validated_data):
         if instance.status == 'Delivering':
@@ -43,4 +43,12 @@ class JobOfferSerializer(serializers.ModelSerializer):
         instance.save()
     
         return instance
+    
+    
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        exclude_fields = ['activation_code', 'complete_code', 'cancel_code']
+        for field in exclude_fields:
+            rep.pop(field, None)
+        return rep
 
