@@ -32,19 +32,18 @@ class BaseProfile(models.Model):
     
 
 class ShipperProfile(BaseProfile):
-    role = models.CharField(max_length=55, default="shipper")
-    
-    def __str__(self):
-        return self.user.email
+    is_shipper = models.BooleanField(default=True, blank=True)
     
 
 class DriverProfile(BaseProfile):
     mc_dot_number = models.CharField(max_length=10, null=True, blank=True)
-    role = models.CharField(max_length=55, default="driver")
+    is_driver = models.BooleanField(default=True, blank=True)
     car = models.ForeignKey(CarInfo, on_delete=models.CASCADE, related_name="driver_car")
     
-    def __str__(self):
-        return self.user.email
+    
+class CompanyDriver(BaseProfile):
+    is_company_dirver = models.BooleanField(default=True, blank=True)
+    car = models.ForeignKey(CarInfo, on_delete=models.CASCADE, related_name="company_driver_car")
     
     
 class CompanyProfile(models.Model):
@@ -58,3 +57,6 @@ class CompanyProfile(models.Model):
     billing_address = models.CharField(max_length=155, null=True, blank=True)
     mc_dot_number = models.CharField(max_length=10, null=True, blank=True)
     auto_park = models.ForeignKey(CarInfo, on_delete=models.CASCADE, related_name="company_autopark")
+    
+    def __str__(self):
+        return self.user.email

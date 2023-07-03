@@ -14,7 +14,8 @@ class IsCompanyOrCarrier(BasePermission):
     def has_permission(self, request, view):
         if request.method in SAFE_METHODS:
             return True
-        # return request.user.is_authenticated and request.user. != Job.objects.get(id=view.kwargs['pk']).owner.role
+        print(request)
+        return request.user.is_authenticated and not request.user
     
         
         
