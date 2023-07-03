@@ -29,7 +29,7 @@ class BaseSerializer(serializers.ModelSerializer):
             instance.first_name = first_name
 
         if last_name:
-            instance.last_name
+            instance.last_name = last_name
         
         if phone:
             instance.phone = phone

@@ -38,3 +38,8 @@ urlpatterns = [
     path('api/v1/profile/', include('applications.profiles.urls')),
     path('api/v1/job/', include('applications.job.urls')),
 ]
+
+urlpatterns += static(
+    settings.MEDIA_URL,
+    document_root=settings.MEDIA_ROOT,
+)
