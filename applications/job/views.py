@@ -51,6 +51,7 @@ class JobViewSet(ModelViewSet):
                 queryset = super().get_queryset()
                 queryset = queryset.filter(owner=self.request.user)
                 return queryset
+            return super().get_queryset()
         except:
             return super().get_queryset()
     
@@ -127,11 +128,7 @@ class JobHistoryViewSet(mixins.ListModelMixin, GenericViewSet):
         queryset = queryset.filter(driver_id = self.request.user.id)
         return queryset
         
-        
-    # def get_queryset(self):
-    #     queryset = super().get_queryset()
-    #     queryset = queryset.filter(is_confirm=True)
-    #     return queryset
+    
     
     
     
