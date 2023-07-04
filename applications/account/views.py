@@ -10,7 +10,6 @@ from applications.account.tasks import send_activation_code
 from applications.account.serializers import (
     UserRegisterSerializer, PasswordChangeSerializer,
     ForgotPasswordSerializer, ForgotPasswordConfirmSerializer,
-     
 )
 from applications.profiles.models import (
     ShipperProfile, DriverProfile, CompanyDriverProfile, CompanyProfile
