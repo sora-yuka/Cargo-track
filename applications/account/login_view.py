@@ -1,13 +1,14 @@
 from django.utils.module_loading import import_string
+from django.contrib.auth import get_user_model
+from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from rest_framework_simplejwt.authentication import AUTH_HEADER_TYPES
 from rest_framework_simplejwt.settings import api_settings
-from applications.profiles.models import BaseProfile
+from applications.profiles.models import BaseProfile, CompanyProfile
 from applications.account.serializers import UserRegisterSerializer
-from applications.profiles.serializers import BaseSerializer
-from django.contrib.auth import get_user_model
+from applications.profiles.serializers import BaseSerializer, CompanySerializer
 
 User = get_user_model()
 
@@ -49,16 +50,31 @@ class TokenViewBase(generics.GenericAPIView):
             raise InvalidToken(e.args[0])
 
         email = request.data.get("email")
-        profile_id = UserRegisterSerializer(User.objects.get(email=email)).data.get("id")
+        user_id = UserRegisterSerializer(User.objects.get(email=email)).data.get("id")
         true_key = []
         
         try:
-            for key, value in BaseSerializer(BaseProfile.objects.get(user=profile_id)).data.items():
-                if value is True:
-                    true_key.append(key)
-        except:
-            pass
-        
+            user_profile = BaseSerializer(BaseProfile.objects.get(user=user_id)).data.items()
+            true_key.append(dict(user_profile).get("id"))
+            
+            if user_profile:
+                for key, value in user_profile:
+                    if value is True:
+                        true_key.append(key)
+                        
+        except ObjectDoesNotExist:
+            try:
+                CompanyProfile.objects.filter(user=user_id).exists()
+                company_profile = CompanySerializer(CompanyProfile.objects.get(user=user_id)).data.items()
+                true_key.append(dict(company_profile).get("id"))
+                if company_profile:
+                    for key, value in company_profile:
+                        if value is True:
+                            true_key.append(key)
+                            
+            except ObjectDoesNotExist:
+                true_key.append("admin")
+
         return Response(
             {   
                 "token": serializer.validated_data,
