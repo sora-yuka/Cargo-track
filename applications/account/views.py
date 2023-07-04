@@ -10,7 +10,6 @@ from applications.account.tasks import send_activation_code
 from applications.account.serializers import (
     UserRegisterSerializer, PasswordChangeSerializer,
     ForgotPasswordSerializer, ForgotPasswordConfirmSerializer,
-    RecoverySerializer, 
 )
 from applications.profiles.models import (
     BaseProfile, ShipperProfile, DriverProfile, CompanyDriverProfile, CompanyProfile
@@ -92,7 +91,7 @@ class CompanyDriverRegisterAPIView(APIView):
         if user:
             send_activation_code.delay(user.email, user.activation_code)
             email = serializer.data.get("email")
-            CompanyDriver.objects.create(user=User.objects.get(email=email), company_dirver=True)
+            CompanyDriverProfile.objects.create(user=User.objects.get(email=email), company_dirver=True)
             return Response(
                 "Registered successfully, we've sent verification code to your email.",
                 status = status.HTTP_201_CREATED,
