@@ -8,7 +8,7 @@ class Job(models.Model):
     
     STATUS = (
         ('Looking for shipper', 'Looking for shipper'),
-        ('Negotiations are underway', 'Negotiations are underway'),
+        ('Loading goods', 'Loading goods'),
         ('Delivering', 'Delivering'),
         ('Completed', 'Completed'),
     )
@@ -23,11 +23,12 @@ class Job(models.Model):
     type_of_goods = models.CharField(max_length=100)
     required_equipment = models.CharField(max_length=200)
     special_instruction = models.TextField(null=True, blank=True)
+    driver_id = models.CharField(max_length=10, null=True, blank=True)
+    status = models.CharField(max_length=100, choices=STATUS, default='Looking for shipper')
     activation_code = models.UUIDField(default=uuid.uuid4())
     complete_code = models.UUIDField(default=uuid.uuid4())
     cancel_code = models.UUIDField(default=uuid.uuid4())
     started_at = models.DateTimeField(null=True, blank=True)
-    status = models.CharField(max_length=100, choices=STATUS, default='Looking for shipper')
     is_confirm = models.BooleanField(default=False)
     
     

@@ -10,9 +10,10 @@ from applications.account.tasks import send_activation_code
 from applications.account.serializers import (
     UserRegisterSerializer, PasswordChangeSerializer,
     ForgotPasswordSerializer, ForgotPasswordConfirmSerializer,
+     
 )
 from applications.profiles.models import (
-    BaseProfile, ShipperProfile, DriverProfile, CompanyDriverProfile, CompanyProfile
+    ShipperProfile, DriverProfile, CompanyDriverProfile, CompanyProfile
 )
 
 User = get_user_model()
