@@ -1,11 +1,13 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 
-from applications.job.views import JobCanselApiView, JobCompleteApiView, JobConfirmApiView, JobOfferApiView, JobViewSet, index
+from applications.job.views import JobCanselApiView, JobCompleteApiView, JobConfirmApiView, JobHistoryViewSet, JobOfferApiView, JobViewSet, index
 
 
 router = DefaultRouter()
+router.register('history', JobHistoryViewSet)
 router.register('', JobViewSet)
+
 
 urlpatterns = [
     path('map/', index),
