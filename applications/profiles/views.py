@@ -4,43 +4,38 @@ from rest_framework.permissions import IsAuthenticated
 
 from applications.profiles.permissions import IsProfileOwner
 from applications.profiles.serializers import (
-    BaseSerializer, ShipperSerializer, DriverSerializer, CompanyDriverSerializer, CompanySerializer
+    ShipperSerializer, DriverSerializer, CompanyDriverSerializer, CompanySerializer
 )
 from applications.profiles.models import (
-    BaseProfile, ShipperProfile, DriverProfile, CompanyDriverProfile, CompanyProfile
+    ShipperProfile, DriverProfile, CompanyDriverProfile, CompanyProfile
 )
 
 
-class BaseProfileViewSet(mixins.ListModelMixin, mixins.UpdateModelMixin, GenericViewSet):
-    permission_classes = [IsProfileOwner]
-    
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        queryset = queryset.filter(user=self.request.user)
-        return queryset
-
-
-class ShipperViewSet(BaseProfileViewSet):
+class ShipperViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, GenericViewSet):
     serializer_class = ShipperSerializer
     queryset = ShipperProfile.objects.all()
+    permission_classes = [IsProfileOwner]
     
     
-class DriverViewSet(BaseProfileViewSet):
+class DriverViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, GenericViewSet):
     serializer_class = DriverSerializer
     queryset = DriverProfile.objects.all()
+    permission_classes = [IsProfileOwner]
     
     
-class CompanyDriverViewSet(BaseProfileViewSet):
+class CompanyDriverViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, GenericViewSet):
     serializer_class = CompanyDriverSerializer
     queryset = CompanyDriverProfile.objects.all()
+    permission_classes = [IsProfileOwner]
     
     
-class CompanyViewSet(BaseProfileViewSet):
+class CompanyViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, GenericViewSet):
     serializer_class = CompanySerializer
     queryset = CompanyProfile.objects.all()
+    permission_classes = [IsProfileOwner]
+
     
-    
-class ViewOtherProfileViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, GenericViewSet):
-    serializer_class = BaseSerializer
-    queryset = BaseProfile.objects.all()
-    permission_classes = [IsAuthenticated]
+# class ViewOtherCompanyViewSet(mixins.RetrieveModelMixin, GenericViewSet):
+#     serializer_class = CompanySerializer
+#     queryset = CompanyProfile.objects.all()
+#     permission_classes = [IsAuthenticated]
