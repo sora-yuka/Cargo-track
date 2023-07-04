@@ -51,9 +51,14 @@ class TokenViewBase(generics.GenericAPIView):
         email = request.data.get("email")
         profile_id = UserRegisterSerializer(User.objects.get(email=email)).data.get("id")
         true_key = []
-        for key, value in BaseSerializer(BaseProfile.objects.get(user=profile_id)).data.items():
-            if value is True:
-                true_key.append(key)
+        
+        try:
+            for key, value in BaseSerializer(BaseProfile.objects.get(user=profile_id)).data.items():
+                if value is True:
+                    true_key.append(key)
+        except:
+            pass
+        
         return Response(
             {   
                 "token": serializer.validated_data,
