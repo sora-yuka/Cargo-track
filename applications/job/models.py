@@ -38,5 +38,3 @@ class Job(models.Model):
     class Meta:
         verbose_name = "Job"
         verbose_name_plural = "Jobs"
-    
-    
