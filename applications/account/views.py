@@ -10,10 +10,10 @@ from applications.account.tasks import send_activation_code
 from applications.account.serializers import (
     UserRegisterSerializer, PasswordChangeSerializer,
     ForgotPasswordSerializer, ForgotPasswordConfirmSerializer,
-    RecoverySerializer, 
+     
 )
 from applications.profiles.models import (
-    BaseProfile, ShipperProfile, DriverProfile, CompanyDriver, CompanyProfile
+    ShipperProfile, DriverProfile, CompanyDriverProfile, CompanyProfile
 )
 
 User = get_user_model()
@@ -38,7 +38,7 @@ class ShipperRegisterAPIView(APIView):
         if user:
             send_activation_code.delay(user.email, user.activation_code)
             email = serializer.data.get("email")
-            ShipperProfile.objects.create(user=User.objects.get(email=email), is_shipper=True)
+            ShipperProfile.objects.create(user=User.objects.get(email=email), shipper=True)
             return Response(
                 "Registered successfully, we've sent verification code to your email.",
                 status = status.HTTP_201_CREATED,
@@ -65,7 +65,7 @@ class DriverRegisterAPIView(APIView):
         if user:
             send_activation_code.delay(user.email, user.activation_code)
             email = serializer.data.get("email")
-            DriverProfile.objects.create(user=User.objects.get(email=email), is_driver=True)
+            DriverProfile.objects.create(user=User.objects.get(email=email), driver=True)
             return Response(
                 "Registered successfully, we've sent verification code to your email.",
                 status = status.HTTP_201_CREATED,
@@ -92,7 +92,7 @@ class CompanyDriverRegisterAPIView(APIView):
         if user:
             send_activation_code.delay(user.email, user.activation_code)
             email = serializer.data.get("email")
-            CompanyDriver.objects.create(user=User.objects.get(email=email), is_company_dirver=True)
+            CompanyDriverProfile.objects.create(user=User.objects.get(email=email), company_dirver=True)
             return Response(
                 "Registered successfully, we've sent verification code to your email.",
                 status = status.HTTP_201_CREATED,
@@ -119,7 +119,7 @@ class CompanyRegisterAPIView(APIView):
         if user:
             send_activation_code.delay(user.email, user.activation_code)
             email = serializer.data.get("email")
-            CompanyProfile.objects.create(user=User.objects.get(email=email), is_company_user=True)
+            CompanyProfile.objects.create(user=User.objects.get(email=email), company_user=True)
             return Response(
                 "Registered successfully, we've sent verification code to your email.",
                 status = status.HTTP_201_CREATED,

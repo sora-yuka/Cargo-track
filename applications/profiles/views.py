@@ -7,7 +7,7 @@ from applications.profiles.serializers import (
     BaseSerializer, ShipperSerializer, DriverSerializer, CompanyDriverSerializer, CompanySerializer
 )
 from applications.profiles.models import (
-    BaseProfile, ShipperProfile, DriverProfile, CompanyDriver, CompanyProfile
+    BaseProfile, ShipperProfile, DriverProfile, CompanyDriverProfile, CompanyProfile
 )
 
 
@@ -32,7 +32,7 @@ class DriverViewSet(BaseProfileViewSet):
     
 class CompanyDriverViewSet(BaseProfileViewSet):
     serializer_class = CompanyDriverSerializer
-    queryset = CompanyDriver.objects.all()
+    queryset = CompanyDriverProfile.objects.all()
     
     
 class CompanyViewSet(BaseProfileViewSet):
