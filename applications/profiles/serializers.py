@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from applications.profiles.models import (
-    BaseProfile, ShipperProfile, DriverProfile, CompanyDriver, CompanyProfile
+    BaseProfile, ShipperProfile, DriverProfile, CompanyDriverProfile, CompanyProfile
 )
 
 
@@ -78,7 +78,7 @@ class DriverSerializer(BaseSerializer):
 class CompanyDriverSerializer(BaseSerializer):
     
     class Meta:
-        model = CompanyDriver
+        model = CompanyDriverProfile
         fields = "__all__"
         
     

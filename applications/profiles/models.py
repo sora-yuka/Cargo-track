@@ -18,10 +18,10 @@ class BaseProfile(models.Model):
     billing_address = models.CharField(max_length=155, null=True, blank=True)
     image = models.ImageField(upload_to='profile/images/', null=True, blank=True)
     bio = models.TextField(null=True, blank=True)
-    is_shipper = models.BooleanField(default=False, blank=True)
-    is_driver = models.BooleanField(default=False, blank=True)
-    is_company_user = models.BooleanField(default=False, blank=True)
-    is_company_dirver = models.BooleanField(default=False, blank=True)
+    shipper = models.BooleanField(default=False, blank=True)
+    driver = models.BooleanField(default=False, blank=True)
+    company_user = models.BooleanField(default=False, blank=True)
+    company_driver = models.BooleanField(default=False, blank=True)
     
     
     def generate_default_username(self):
@@ -37,17 +37,15 @@ class BaseProfile(models.Model):
     
 
 class ShipperProfile(BaseProfile):
-    shipper = models.BooleanField(default=True, blank=True)
+    pass
     
 
 class DriverProfile(BaseProfile):
     mc_dot_number = models.CharField(max_length=10, null=True, blank=True)
-    driver = models.BooleanField(default=True, blank=True)
     car = models.ForeignKey(CarInfo, on_delete=models.CASCADE, related_name="driver_car", null=True, blank=True)
     
     
-class CompanyDriver(BaseProfile):
-    company_dirver = models.BooleanField(default=True, blank=True)
+class CompanyDriverProfile(BaseProfile):
     car = models.ForeignKey(CarInfo, on_delete=models.CASCADE, related_name="company_driver_car", null=True, blank=True)
     
     
@@ -62,7 +60,6 @@ class CompanyProfile(models.Model):
     billing_address = models.CharField(max_length=155, null=True, blank=True)
     mc_dot_number = models.CharField(max_length=10, null=True, blank=True)
     auto_park = models.ForeignKey(CarInfo, on_delete=models.CASCADE, related_name="company_autopark", null=True, blank=True)
-    company = models.BooleanField(default=True, blank=False)
     
     def __str__(self):
         return self.user.email

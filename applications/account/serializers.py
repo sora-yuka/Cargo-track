@@ -6,6 +6,7 @@ from django.contrib.auth import get_user_model
 from applications.account.models import make_password, Recovery
 from applications.account.tasks import send_recovery_code
 
+
 User = get_user_model()
     
     
@@ -21,7 +22,7 @@ class UserRegisterSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = User
-        fields = ["email", "password", "password_confirm"]
+        fields = ["id", "email", "password", "password_confirm"]
     
     def validate(self, attrs):
         password = attrs.get("password")

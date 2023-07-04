@@ -1,5 +1,6 @@
 from django.urls import path
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView
+from applications.account.login_view import TokenObtainPairView
 from applications.account.views import (
     ShipperRegisterAPIView, DriverRegisterAPIView, CompanyDriverRegisterAPIView, CompanyRegisterAPIView,
     UserActivationAPIView, PasswordChangeAPIView, ForgotPasswordAPIView, ForgotPasswordConfirmAPIView, 
@@ -9,7 +10,7 @@ urlpatterns = [
     path("register/shipper/", ShipperRegisterAPIView.as_view()),
     path("register/driver/", DriverRegisterAPIView.as_view()),
     path("register/company/", CompanyRegisterAPIView.as_view()),
-    path("register/company/driver/", CompanyDriverRegisterAPIView.as_view()),
+    # path("register/company/driver/<uuid:signup>/", CompanyDriverRegisterAPIView.as_view()),
     path("confirm/<uuid:activation_code>/", UserActivationAPIView.as_view()),
     path("login/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("refresh/", TokenRefreshView.as_view(), name="token_refresh"),
