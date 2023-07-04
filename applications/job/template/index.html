@@ -12,13 +12,6 @@
         //Create a pushpin.
         var pushpin = new Microsoft.Maps.Pushpin(map.getCenter());
         map.entities.push(pushpin);
-
-        //Add mouse events to the pushpin.
-        Microsoft.Maps.Events.addHandler(pushpin, 'click', function () { highlight('pushpinClick'); });
-        Microsoft.Maps.Events.addHandler(pushpin, 'mousedown', function () { highlight('pushpinMousedown'); });
-        Microsoft.Maps.Events.addHandler(pushpin, 'mouseout', function () { highlight('pushpinMouseout'); });
-        Microsoft.Maps.Events.addHandler(pushpin, 'mouseover', function () { highlight('pushpinMouseover'); });
-        Microsoft.Maps.Events.addHandler(pushpin, 'mouseup', function () { highlight('pushpinMouseup'); });
     }
 
     function highlight(id) {
@@ -29,15 +22,9 @@
         setTimeout(function () { document.getElementById(id).style.background = 'white'; }, 1000);
     }
     </script>
-    <script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=[ArCEFF8BVHKQ5tpMyebIPLKCAMQnjptMHMO78lNpiPyfXIoi3Esad6wXoqaEN8EI]' async defer></script>
+    <script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?callback=GetMap&key=ArCEFF8BVHKQ5tpMyebIPLKCAMQnjptMHMO78lNpiPyfXIoi3Esad6wXoqaEN8EI' async defer></script>
 </head>
 <body>
     <div id="myMap" style="position:relative;width:120vh;height:70vh;"></div>
-
-    <div id="pushpinClick">click</div>
-    <div id="pushpinMousedown">mousedown</div>
-    <div id="pushpinMouseout">mouseout</div>
-    <div id="pushpinMouseover">mouseover</div>
-    <div id="pushpinMouseup">mouseup</div>
 </body>
 </html>
