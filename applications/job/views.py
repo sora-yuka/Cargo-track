@@ -16,7 +16,7 @@ from rest_framework.viewsets import GenericViewSet
 from applications.job.models import Job
 from applications.job.permissions import IsShipper, IsCompanyOrCarrier
 from applications.job.serializers import JobOfferSerializer, JobSerializer
-from applications.profiles.models import BaseProfile
+from applications.profiles.models import BaseProfile, DriverProfile
 
 
 def index(request):

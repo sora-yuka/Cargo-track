@@ -80,4 +80,4 @@ class CompanyDriverProfile(BaseProfile):
     bio = models.TextField(null=True, blank=True)
     car = models.ForeignKey(CarInfo, on_delete=models.CASCADE, related_name="company_driver_car", null=True, blank=True)
     mc_dot_number = models.CharField(max_length=10, null=True, blank=True)
-    status = models.CharField(max_length=55, choices=DRIVER_STATUS, blank=True)
+    status = models.CharField(max_length=55, choices=DRIVER_STATUS, default='free')

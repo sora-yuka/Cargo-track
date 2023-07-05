@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from applications.job.models import Job
 from applications.job.tasks import send_confirmation_email, send_email_to_owner
+from applications.profiles.models import DriverProfile
 
 
 class JobSerializer(serializers.ModelSerializer):
@@ -38,8 +39,11 @@ class JobOfferSerializer(serializers.ModelSerializer):
         send_email_to_owner.delay(email_shipper, email_carrier)
         send_confirmation_email.delay(email_carrier, instance.activation_code, instance.cancel_code, instance.id)
         
+        carrier = DriverProfile.objects.get(id=carrier_id)
+        carrier.status = 'busy'
         instance.status = 'Loading goods'
         instance.driver_id = carrier_id
+        carrier.save()
         instance.save()
     
         return instance
