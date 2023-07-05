@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from applications.feedback.models import Rating
 from applications.profiles.models import (
     BaseProfile, ShipperProfile, DriverProfile, CompanyDriverProfile, CompanyProfile
 )
@@ -28,7 +29,6 @@ class ShipperSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = ShipperProfile
-        # fields = "__all__"
         exclude = ["shipper", "driver", "company_driver"]
     
 
@@ -126,45 +126,13 @@ class DriverSerializer(serializers.ModelSerializer):
         return rep
     
 
-class ShipperSerializer(BaseSerializer):
-    
-    class Meta:
-        model = ShipperProfile
-        fields = "__all__"
-        
-    # def to_representation(self, instance):
-    #     rep = super().to_representation(instance)
-    #     exclude_fields = ['rating']
-    #     for field in exclude_fields:
-    #         rep.pop(field, None)
-    #     return rep
 
-
-class DriverSerializer(BaseSerializer):
-    
-    class Meta:
-        model = DriverProfile
-        fields = "__all__"
-
-
-    def to_representation(self, instance):
-        rep =  super().to_representation(instance)
-        rep['rating'] = instance.ratings.all().aggregate(Avg('rating'))['rating__avg']
-        return rep
-
-
-class CompanyDriverSerializer(BaseSerializer):
+class CompanyDriverSerializer(DriverSerializer):
     
     class Meta:
         model = CompanyDriverProfile
         fields = "__all__"
     
-    
-    def to_representation(self, instance):
-        rep =  super().to_representation(instance)
-        rep['rating'] = instance.ratings.all().aggregate(Avg('rating'))['rating__avg']
-        return rep
-        
     
 class CompanySerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.email')
@@ -173,8 +141,4 @@ class CompanySerializer(serializers.ModelSerializer):
         model = CompanyProfile
         fields = "__all__"
         
-        
-    def to_representation(self, instance):
-        rep =  super().to_representation(instance)
-        rep['rating'] = instance.ratings.all().aggregate(Avg('rating'))['rating__avg']
-        return rep
+    
