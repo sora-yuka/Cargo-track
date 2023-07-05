@@ -8,10 +8,7 @@ class IsShipper(BasePermission):
     def has_permission(self, request, view):
         if request.method in SAFE_METHODS or request.method == 'POST':
             return True
-        try:
-            return request.user.is_authenticated and request.user == Job.objects.get(id=view.kwargs['pk']).owner
-        except:
-            return "Something went wrong"
+        return request.user.is_authenticated and request.user == Job.objects.get(id=view.kwargs['pk']).owner
     
     
 class IsCompanyOrCarrier(BasePermission):

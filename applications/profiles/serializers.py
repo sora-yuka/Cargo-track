@@ -14,14 +14,8 @@ class BaseSerializer(serializers.ModelSerializer):
         fields = [
             "id", "user", "username", "first_name", "last_name",
             "phone", "billing_address", "image", 
-            "shipper" ,"driver" ,"company_driver",
+            "shipper" ,"driver" ,"company_driver"
         ]
-        
-        
-    def to_representation(self, instance):
-        rep =  super().to_representation(instance)
-        rep['rating'] = instance.ratings.all().aggregate(Avg('rating'))['rating__avg']
-        return rep
 
         
 class ShipperSerializer(serializers.ModelSerializer):
@@ -126,6 +120,21 @@ class DriverSerializer(serializers.ModelSerializer):
         return rep
     
 
+<<<<<<< HEAD
+=======
+class ShipperSerializer(BaseSerializer):
+    
+    class Meta:
+        model = ShipperProfile
+        fields = "__all__"
+        
+    def to_representation(self, instance):
+        rep = super().to_representation(instance)
+        exclude_fields = ['rating']
+        for field in exclude_fields:
+            rep.pop(field, None)
+        return rep
+>>>>>>> parent of 790957c (cost)
 
 class CompanyDriverSerializer(DriverSerializer):
     
