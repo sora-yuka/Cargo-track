@@ -1,4 +1,2 @@
 from django.urls import path
-from applications.car.views import (
-    CarBrandViewSet, CarTypeViewSet, CarDocumentViewSet, CarEquipmentViewSet, CarInfoViewSet
-)
+from applications.car.views import CarInfoViewSet

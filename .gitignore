@@ -2,6 +2,11 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=django,python
 venv
 .env
+./applications/account/migrations
+./applications/profile/migrations
+./applications/job/migrations
+./applications/car/migrations
+./applications/feedback/migrations
 
 ### Django ###
 *.log

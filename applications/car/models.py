@@ -1,44 +1,21 @@
 from django.db import models
 
-# Create your models here.
+CAR_TYPE = (
+    ("Euro-Track", "Euro-Track"),
+    ("Container", "Container"),
+    ("Tank", "Tank"),
+    ("Refrigerator", "Refrigerator"),
+)
 
-
-class CarBrand(models.Model):
-    brand = models.CharField(max_length=155)
-    
-    def __str__(self):
-        return self.brand
-
-
-class CarType(models.Model):
-    car_type = models.CharField(max_length=255)
-    
-    def __str__(self):
-        return self.car_type
-    
-    
-class CarDocument(models.Model):
-    document = models.TextField()
-    documents_file = models.FileField(upload_to="car/documents/", null=True, blank=True)
-
-    def __str__(self):
-        return self.document
-
-
-class CarEquipment(models.Model):
-    equipment = models.CharField(max_length=155)
-    
-    def __str__(self):
-        return self.equipment
-    
 
 class CarInfo(models.Model):
-    brand = models.ForeignKey(CarBrand, on_delete=models.CASCADE, related_name="car_brand")
+    brand = models.CharField(max_length=75)
     year_of_manufacture = models.PositiveIntegerField()
-    car_type = models.ForeignKey(CarType, on_delete=models.CASCADE)
+    car_type = models.CharField(max_length=55, choices=CAR_TYPE)
     load_capacity = models.CharField(max_length=75)
-    equipment = models.ForeignKey(CarEquipment, on_delete=models.CASCADE, related_name="car_equipment")
-    documents = models.ForeignKey(CarDocument, on_delete=models.CASCADE, related_name="car_documents")
+    equipment = models.TextField()
+    documents = models.TextField()
+    documents_file = models.FileField(upload_to=f"car/{str(brand)}/document")
     car_image = models.ImageField(upload_to="car/images/")
     
     def __str__(self):

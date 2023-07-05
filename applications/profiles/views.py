@@ -12,45 +12,41 @@ from applications.profiles.models import (
 )
 
 
-class BaseProfileViewSet(mixins.ListModelMixin, mixins.UpdateModelMixin, GenericViewSet, FeedbackMixin):
-    permission_classes = [IsProfileOwner]
-    
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        queryset = queryset.filter(user=self.request.user)
-        return queryset
-    
-    def get_permissions(self):
-        if self.action == 'rating':
-            return [IsFeedbackOwner()]
-        return super().get_permissions()
 
 
-class ShipperViewSet(BaseProfileViewSet):
+
+class ShipperViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, GenericViewSet):
     serializer_class = ShipperSerializer
     queryset = ShipperProfile.objects.all()
     permission_classes = [IsProfileOwner]
     
     
-class DriverViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, GenericViewSet):
+    
+    
+class DriverViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, GenericViewSet, FeedbackMixin):
     serializer_class = DriverSerializer
     queryset = DriverProfile.objects.all()
     permission_classes = [IsProfileOwner]
     
+    def get_permissions(self):
+        if self.action == 'rating':
+            return [IsFeedbackOwner()]
+        return super().get_permissions()
     
-class CompanyDriverViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, GenericViewSet):
+    
+class CompanyDriverViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, GenericViewSet):
     serializer_class = CompanyDriverSerializer
     queryset = CompanyDriverProfile.objects.all()
     permission_classes = [IsProfileOwner]
     
     
-class CompanyViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, GenericViewSet):
+class CompanyViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, GenericViewSet, FeedbackMixin):
     serializer_class = CompanySerializer
     queryset = CompanyProfile.objects.all()
     permission_classes = [IsProfileOwner]
-
     
-# class ViewOtherCompanyViewSet(mixins.RetrieveModelMixin, GenericViewSet):
-#     serializer_class = CompanySerializer
-#     queryset = CompanyProfile.objects.all()
-#     permission_classes = [IsAuthenticated]
+    
+    def get_permissions(self):
+        if self.action == 'rating':
+            return [IsFeedbackOwner()]
+        return super().get_permissions()

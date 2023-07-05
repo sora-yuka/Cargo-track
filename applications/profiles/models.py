@@ -3,6 +3,14 @@ from django.contrib.auth import get_user_model
 from phonenumber_field.modelfields import PhoneNumberField
 from applications.car.models import CarInfo
 
+# Create your models here.
+
+DRIVER_STATUS = (
+    ("free", "free"),
+    ("busy", "busy"),
+)
+
+
 User = get_user_model()
 
 
@@ -39,11 +47,7 @@ class DriverProfile(BaseProfile):
     bio = models.TextField(null=True, blank=True)
     mc_dot_number = models.CharField(max_length=10, null=True, blank=True)
     car = models.ForeignKey(CarInfo, on_delete=models.CASCADE, related_name="driver_car", null=True, blank=True)
-    
-    
-class CompanyDriverProfile(BaseProfile):
-    bio = models.TextField(null=True, blank=True)
-    car = models.ForeignKey(CarInfo, on_delete=models.CASCADE, related_name="company_driver_car", null=True, blank=True)
+    status = models.CharField(max_length=55, choices=DRIVER_STATUS)
     
     
 class CompanyProfile(models.Model):
@@ -59,6 +63,14 @@ class CompanyProfile(models.Model):
     mc_dot_number = models.CharField(max_length=10, null=True, blank=True)
     auto_park = models.ForeignKey(CarInfo, on_delete=models.CASCADE, related_name="company_autopark", null=True, blank=True)
     company_user = models.BooleanField(default=False, blank=True)
-    
+
     def __str__(self):
         return self.user.email
+    
+    
+class CompanyDriverProfile(BaseProfile):
+    company = models.OneToOneField(CompanyProfile, on_delete=models.CASCADE, related_name="company_driver_profile")
+    bio = models.TextField(null=True, blank=True)
+    car = models.ForeignKey(CarInfo, on_delete=models.CASCADE, related_name="company_driver_car", null=True, blank=True)
+    mc_dot_number = models.CharField(max_length=10, null=True, blank=True)
+    status = models.CharField(max_length=55, choices=DRIVER_STATUS)
