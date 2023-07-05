@@ -44,11 +44,6 @@ class DriverProfile(BaseProfile):
     car = models.ForeignKey(CarInfo, on_delete=models.CASCADE, related_name="driver_car", null=True, blank=True)
     
     
-class CompanyDriverProfile(BaseProfile):
-    bio = models.TextField(null=True, blank=True)
-    car = models.ForeignKey(CarInfo, on_delete=models.CASCADE, related_name="company_driver_car", null=True, blank=True)
-    
-    
 class CompanyProfile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="company_profile")
     company_name = models.CharField(max_length=155, null=True, blank=True)
@@ -65,3 +60,9 @@ class CompanyProfile(models.Model):
     
     def __str__(self):
         return self.user.email
+    
+    
+class CompanyDriverProfile(BaseProfile):
+    bio = models.TextField(null=True, blank=True)
+    car = models.ForeignKey(CarInfo, on_delete=models.CASCADE, related_name="company_driver_car", null=True, blank=True)
+    company = models.OneToOneField(CompanyProfile, on_delete=models.CASCADE, related_name="company_driver_profile")

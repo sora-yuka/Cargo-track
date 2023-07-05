@@ -11,31 +11,25 @@ from applications.profiles.models import (
 )
 
 
-class ShipperViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, GenericViewSet):
+class ShipperViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, GenericViewSet,):
     serializer_class = ShipperSerializer
     queryset = ShipperProfile.objects.all()
     permission_classes = [IsProfileOwner]
     
     
-class DriverViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, GenericViewSet):
+class DriverViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, GenericViewSet):
     serializer_class = DriverSerializer
     queryset = DriverProfile.objects.all()
     permission_classes = [IsProfileOwner]
     
     
-class CompanyDriverViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, GenericViewSet):
+class CompanyDriverViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, GenericViewSet):
     serializer_class = CompanyDriverSerializer
     queryset = CompanyDriverProfile.objects.all()
     permission_classes = [IsProfileOwner]
     
     
-class CompanyViewSet(mixins.RetrieveModelMixin, mixins.UpdateModelMixin, GenericViewSet):
+class CompanyViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, GenericViewSet):
     serializer_class = CompanySerializer
     queryset = CompanyProfile.objects.all()
     permission_classes = [IsProfileOwner]
-
-    
-# class ViewOtherCompanyViewSet(mixins.RetrieveModelMixin, GenericViewSet):
-#     serializer_class = CompanySerializer
-#     queryset = CompanyProfile.objects.all()
-#     permission_classes = [IsAuthenticated]
