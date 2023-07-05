@@ -61,7 +61,7 @@ class CompanyProfile(models.Model):
     phone = PhoneNumberField(blank=True, null=True)
     billing_address = models.CharField(max_length=155, null=True, blank=True)
     mc_dot_number = models.CharField(max_length=10, null=True, blank=True)
-    auto_park = models.ForeignKey(CarInfo, on_delete=models.CASCADE, related_name="company_autopark", null=True, blank=True)
+    auto_park = models.ManyToManyField(CarInfo, related_name="company_autopark", null=True, blank=True)
     company_user = models.BooleanField(default=False, blank=True)
 
     def __str__(self):

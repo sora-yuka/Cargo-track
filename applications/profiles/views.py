@@ -12,9 +12,6 @@ from applications.profiles.models import (
 )
 
 
-
-
-
 class ShipperViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, GenericViewSet):
     serializer_class = ShipperSerializer
     queryset = ShipperProfile.objects.all()
