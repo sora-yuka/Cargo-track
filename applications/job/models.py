@@ -1,3 +1,4 @@
+import random
 import uuid
 from django.db import models
 from django.contrib.auth import get_user_model
@@ -30,6 +31,12 @@ class Job(models.Model):
     cancel_code = models.UUIDField(default=uuid.uuid4())
     started_at = models.DateTimeField(null=True, blank=True)
     is_confirm = models.BooleanField(default=False)
+    cost = models.CharField(max_length=20, default=random.randint(1000, 4000))
+    
+    
+    def save(self, *args, **kwargs):
+        self.cost = str(self.cost) + ' $'
+        super().save(*args, **kwargs)
     
     
     def __str__(self) -> str:
