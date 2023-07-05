@@ -2,10 +2,6 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from phonenumber_field.modelfields import PhoneNumberField
 from applications.car.models import CarInfo
-from applications.feedback.models import Rating
-
-# Create your models here.
-
 
 User = get_user_model()
 

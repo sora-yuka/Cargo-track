@@ -120,21 +120,6 @@ class DriverSerializer(serializers.ModelSerializer):
         return rep
     
 
-<<<<<<< HEAD
-=======
-class ShipperSerializer(BaseSerializer):
-    
-    class Meta:
-        model = ShipperProfile
-        fields = "__all__"
-        
-    def to_representation(self, instance):
-        rep = super().to_representation(instance)
-        exclude_fields = ['rating']
-        for field in exclude_fields:
-            rep.pop(field, None)
-        return rep
->>>>>>> parent of 790957c (cost)
 
 class CompanyDriverSerializer(DriverSerializer):
     

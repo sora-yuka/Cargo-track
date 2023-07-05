@@ -15,31 +15,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
-from django.conf.urls.static import static
-from config import settings
-from drf_yasg import openapi
-from drf_yasg.views import get_schema_view
-
-schema_view = get_schema_view(openapi.Info(
-    title = 'Jellyfish | CargoTeam',
-    default_version = '1.0',
-    description = 'API DOCS for Cargo',
-    terms_of_service='https://policies.google.com/terms',
-    license=openapi.License(name='The project is not proprietary and is intended for educational purposes.')
-),
-    public = True
-)
+from django.urls import path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('swagger/', schema_view.with_ui('swagger')),
-    path('api/v1/account/', include('applications.account.urls')),
-    path('api/v1/profile/', include('applications.profiles.urls')),
-    path('api/v1/job/', include('applications.job.urls')),
 ]
-
-urlpatterns += static(
-    settings.MEDIA_URL,
-    document_root=settings.MEDIA_ROOT,
-)
