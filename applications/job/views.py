@@ -22,7 +22,8 @@ from applications.profiles.models import BaseProfile
 def index(request):
     return render(request, "applications/job/template/index.html")
 
-
+def card_map(request):
+    return render(request, "applications/job/template/map.html")
 
 class PaginationApiView(PageNumberPagination):
     page_size = 20

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <script type='text/javascript'>
+
+        function dictToParamString(obj) {
+            var str = [];
+            for (var p in obj) str.push(encodeURIComponent(p) + "=" + encodeURIComponent(obj[p]));
+            return str.join("&");
+        }
+        
+        reqhttp = new XMLHttpRequest();
+        var url = "https://singlesearch.alk.com/na/api/search?";
+        
+        var params = {
+            query: "37.892845, -85.974742"
+        };
+        
+        var urlQuery = url + dictToParamString(params);
+        reqhttp.open("GET", urlQuery, true);
+        reqhttp.setRequestHeader("Content-type", "application/json");
+        reqhttp.setRequestHeader("Authorization", "**YOUR API KEY HERE**");
+        reqhttp.responseType = "arraybuffer";
+        
+        reqhttp.onreadystatechange = function () {
+            //Call a function when the state changes.
+            if (reqhttp.readyState == 4 && reqhttp.status == 200) {
+            var res = reqhttp.response;
+            if (res) {
+                var uInt8Array = new Uint8Array(res);
+                var i = uInt8Array.length;
+                var binaryString = new Array(i);
+                while (i--) {
+                binaryString[i] = String.fromCharCode(uInt8Array[i]);
+                }
+                var data = binaryString.join("");
+        
+                console.log(data);
+            }
+            }
+        };
+        
+            function doFunction() {
+                reqhttp.send();
+            }
+        </script>
+    </head>
+</html>

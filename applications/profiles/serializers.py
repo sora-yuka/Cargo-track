@@ -3,6 +3,7 @@ from applications.profiles.models import (
     BaseProfile, ShipperProfile, DriverProfile, CompanyDriverProfile, CompanyProfile
 )
 from applications.feedback.serializers import CRatingSerializer, DRatingSerializer
+from applications.car.serializers import CarInfoSerializer
 from django.db.models import Avg
 
 
@@ -117,6 +118,7 @@ class DriverSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         rep =  super().to_representation(instance)
         rep['rating'] = instance.dratings.all().aggregate(Avg('rating'))['rating__avg']
+        rep['car_info'] = CarInfoSerializer(instance.car).data
         return rep
     
     
