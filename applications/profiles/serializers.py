@@ -2,6 +2,7 @@ from rest_framework import serializers
 from applications.profiles.models import (
     BaseProfile, ShipperProfile, DriverProfile, CompanyDriverProfile, CompanyProfile
 )
+from django.db.models import Avg
 
 
 class BaseSerializer(serializers.ModelSerializer):
@@ -21,7 +22,6 @@ class ShipperSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = ShipperProfile
-        # fields = "__all__"
         exclude = ["shipper", "driver", "company_driver"]
     
 
@@ -62,7 +62,7 @@ class DriverSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = DriverProfile
-        fields = "__all__"
+        exclude = ["shipper", "driver", "company_driver"]
         
     def update(self, instance, validated_data):
         username = validated_data.get("username")
@@ -112,13 +112,24 @@ class DriverSerializer(serializers.ModelSerializer):
         
         instance.save()
         return instance
-        
-
+    
+    def to_representation(self, instance):
+        rep =  super().to_representation(instance)
+        rep['rating'] = instance.ratings.all().aggregate(Avg('rating'))['rating__avg']
+        return rep
+    
+    
 class CompanyDriverSerializer(DriverSerializer):
     
     class Meta:
         model = CompanyDriverProfile
-        fields = "__all__"
+        exclude = ["shipper", "driver", "company_driver"]
+    
+    
+    def to_representation(self, instance):
+        rep =  super().to_representation(instance)
+        rep['rating'] = instance.ratings.all().aggregate(Avg('rating'))['rating__avg']
+        return rep
         
     
 class CompanySerializer(serializers.ModelSerializer):
@@ -139,28 +150,28 @@ class CompanySerializer(serializers.ModelSerializer):
         phone = validated_data.get("phone")
         billing_address = validated_data.get("billing_address")
         auto_park = validated_data.get("auto_park")
-        
+
         if company_name:
             instance.company_name = company_name
-        
+
         if registration_number:
             instance.registration_number = registration_number
 
         if company_license:
             instance.company_license = company_license
-        
+
         if company_license_file:
             instance.company_license_file = company_license_file
-        
+
         if phone:
             instance.phone = phone
-            
+
         if insurance_contract:
             instance.insurance_contract = insurance_contract
-            
+
         if insurance_contract_file:
             instance.insurance_contract_file = insurance_contract_file
-            
+
         if mc_dot_number:
             if (
                     not mc_dot_number.startswith("MC#") or len(mc_dot_number) != 9
@@ -169,14 +180,20 @@ class CompanySerializer(serializers.ModelSerializer):
                 ):
                 raise serializers.ValidationError("Incorrect MC/DOT number.")
             instance.mc_dot_number = mc_dot_number
-        
+
         if billing_address:
             if len(billing_address.split(",")) != 3:
                 raise serializers.ValidationError("Incoreect billing address")
             instance.billing_address = billing_address
-        
+
         if auto_park:
             instance.auto_park = auto_park
-        
+
         instance.save()
         return instance
+        
+        
+    def to_representation(self, instance):
+        rep =  super().to_representation(instance)
+        rep['rating'] = instance.ratings.all().aggregate(Avg('rating'))['rating__avg']
+        return rep

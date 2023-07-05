@@ -10,10 +10,13 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.utils import timezone
 from rest_framework.decorators import action
+from rest_framework import mixins
+from rest_framework.viewsets import GenericViewSet
 
 from applications.job.models import Job
 from applications.job.permissions import IsShipper, IsCompanyOrCarrier
 from applications.job.serializers import JobOfferSerializer, JobSerializer
+from applications.profiles.models import BaseProfile
 
 
 def index(request):
@@ -40,6 +43,17 @@ class JobViewSet(ModelViewSet):
     
     def perform_create(self, serializer):
         return serializer.save(owner=self.request.user)
+    
+    
+    def get_queryset(self):
+        try:
+            if BaseProfile.objects.get(user=self.request.user.id).shipper:
+                queryset = super().get_queryset()
+                queryset = queryset.filter(owner=self.request.user)
+                return queryset
+            return super().get_queryset()
+        except:
+            return super().get_queryset()
     
     
     @action(detail=True, methods=['GET'])
@@ -102,6 +116,19 @@ class JobCanselApiView(APIView):
             job.save(update_fields=['status', 'is_confirm', 'driver_id'])
             return Response({'message': 'This job was canceled'}, status=status.HTTP_200_OK)
         return Response({'message': 'You have already canceled this job'}, status=status.HTTP_404_NOT_FOUND)
+    
+    
+class JobHistoryViewSet(mixins.ListModelMixin, GenericViewSet):
+    queryset = Job.objects.all()
+    serializer_class = JobSerializer
+    permission_classes = []
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.filter(driver_id = self.request.user.id)
+        return queryset
+        
+    
     
     
     
