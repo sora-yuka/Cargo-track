@@ -2,6 +2,7 @@ from rest_framework import serializers
 from applications.profiles.models import (
     BaseProfile, ShipperProfile, DriverProfile, CompanyDriverProfile, CompanyProfile
 )
+from applications.feedback.serializers import RatingSerializer
 from django.db.models import Avg
 
 
@@ -113,10 +114,10 @@ class DriverSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
     
-    def to_representation(self, instance):
-        rep =  super().to_representation(instance)
-        rep['rating'] = instance.ratings.all().aggregate(Avg('rating'))['rating__avg']
-        return rep
+    # def to_representation(self, instance):
+    #     rep =  super().to_representation(instance)
+    #     rep['rating'] = instance.ratings.all().aggregate(Avg('rating'))['rating__avg']
+    #     return rep
     
     
 class CompanyDriverSerializer(DriverSerializer):
@@ -126,10 +127,8 @@ class CompanyDriverSerializer(DriverSerializer):
         exclude = ["shipper", "driver", "company_driver"]
     
     
-    def to_representation(self, instance):
-        rep =  super().to_representation(instance)
-        rep['rating'] = instance.ratings.all().aggregate(Avg('rating'))['rating__avg']
-        return rep
+    CompanyProfile().create_link()
+    print(CompanyProfile().link)
         
     
 class CompanySerializer(serializers.ModelSerializer):
@@ -193,7 +192,3 @@ class CompanySerializer(serializers.ModelSerializer):
         return instance
         
         
-    def to_representation(self, instance):
-        rep =  super().to_representation(instance)
-        rep['rating'] = instance.ratings.all().aggregate(Avg('rating'))['rating__avg']
-        return rep

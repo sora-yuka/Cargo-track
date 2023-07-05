@@ -47,7 +47,7 @@ class DriverProfile(BaseProfile):
     bio = models.TextField(null=True, blank=True)
     mc_dot_number = models.CharField(max_length=10, null=True, blank=True)
     car = models.ForeignKey(CarInfo, on_delete=models.CASCADE, related_name="driver_car", null=True, blank=True)
-    status = models.CharField(max_length=55, choices=DRIVER_STATUS)
+    status = models.CharField(max_length=55, choices=DRIVER_STATUS, blank=True)
     
     
 class CompanyProfile(models.Model):
@@ -61,8 +61,15 @@ class CompanyProfile(models.Model):
     phone = PhoneNumberField(blank=True, null=True)
     billing_address = models.CharField(max_length=155, null=True, blank=True)
     mc_dot_number = models.CharField(max_length=10, null=True, blank=True)
-    auto_park = models.ManyToManyField(CarInfo, related_name="company_autopark", null=True, blank=True)
+    auto_park = models.ManyToManyField(CarInfo, related_name="company_autopark", blank=True)
     company_user = models.BooleanField(default=False, blank=True)
+    link = models.CharField(max_length=155, blank=True, null=True)
+    
+    def create_link(self):
+        import uuid
+        from decouple import config
+        code = str(uuid.uuid4())
+        self.link = f"http://{config('SERVER_IP')}/api/v1/register/company/driver/{code}/"
 
     def __str__(self):
         return self.user.email
@@ -73,4 +80,4 @@ class CompanyDriverProfile(BaseProfile):
     bio = models.TextField(null=True, blank=True)
     car = models.ForeignKey(CarInfo, on_delete=models.CASCADE, related_name="company_driver_car", null=True, blank=True)
     mc_dot_number = models.CharField(max_length=10, null=True, blank=True)
-    status = models.CharField(max_length=55, choices=DRIVER_STATUS)
+    status = models.CharField(max_length=55, choices=DRIVER_STATUS, blank=True)

@@ -19,3 +19,8 @@ class IsFeedbackOwner(BasePermission):
                 return request.user.is_authenticated and BaseProfile.objects.get(user=request.user).shipper
             except:
                 return 'Something went wrong'
+            
+
+class IsCompanyUser(BasePermission):
+    def has_permission(self, request, view):
+        return request

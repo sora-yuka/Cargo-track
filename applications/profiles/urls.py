@@ -7,7 +7,7 @@ from applications.profiles.views import (
 router = DefaultRouter()
 router.register("shipper", ShipperViewSet)
 router.register("company", CompanyViewSet)
-router.register("company/driver/", CompanyDriverViewSet)
+router.register("company/driver", CompanyDriverViewSet)
 router.register("", DriverViewSet)
 
 urlpatterns = [
