@@ -12,21 +12,7 @@ from applications.profiles.models import (
 )
 
 
-class BaseProfileViewSet(mixins.ListModelMixin, mixins.UpdateModelMixin, GenericViewSet, FeedbackMixin):
-    permission_classes = [IsProfileOwner]
-    
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        queryset = queryset.filter(user=self.request.user)
-        return queryset
-    
-    def get_permissions(self):
-        if self.action == 'rating':
-            return [IsFeedbackOwner()]
-        return super().get_permissions()
-
-
-class ShipperViewSet(BaseProfileViewSet):
+class ShipperViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, GenericViewSet):
     serializer_class = ShipperSerializer
     queryset = ShipperProfile.objects.all()
     permission_classes = [IsProfileOwner]

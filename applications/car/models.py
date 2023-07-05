@@ -15,8 +15,8 @@ class CarInfo(models.Model):
     load_capacity = models.CharField(max_length=75)
     equipment = models.TextField()
     documents = models.TextField()
-    documents_file = models.FileField(upload_to=f"car/{str(brand)}/document")
+    documents_file = models.FileField(upload_to=f"car/{brand}/document")
     car_image = models.ImageField(upload_to="car/images/")
     
     def __str__(self):
-        return self.brand.brand
+        return self.brand

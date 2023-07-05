@@ -37,6 +37,7 @@ urlpatterns = [
     path('api/v1/account/', include('applications.account.urls')),
     path('api/v1/profile/', include('applications.profiles.urls')),
     path('api/v1/job/', include('applications.job.urls')),
+    path('api/v1/car/', include('applications.car.urls')),
 ]
 
 urlpatterns += static(
