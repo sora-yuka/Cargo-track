@@ -12,5 +12,7 @@ router.register("", DriverViewSet)
 
 urlpatterns = [
     path("", include(router.urls)),
-    # path('<int:pk>/rating/', BaseProfileViewSet.as_view({'post': 'rating'})),
+    path('<int:pk>/rating/', DriverViewSet.as_view({'post': 'rating'})),
+    path('company/<int:pk>/rating/', CompanyViewSet.as_view({'post': 'rating'})),
+    path('company/driver/<int:pk>/rating/', CompanyDriverViewSet.as_view({'post': 'rating'})),
 ]

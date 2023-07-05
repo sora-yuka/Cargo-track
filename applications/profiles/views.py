@@ -18,10 +18,17 @@ class ShipperViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.Up
     permission_classes = [IsProfileOwner]
     
     
-class DriverViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, GenericViewSet):
+    
+    
+class DriverViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, GenericViewSet, FeedbackMixin):
     serializer_class = DriverSerializer
     queryset = DriverProfile.objects.all()
     permission_classes = [IsProfileOwner]
+    
+    def get_permissions(self):
+        if self.action == 'rating':
+            return [IsFeedbackOwner()]
+        return super().get_permissions()
     
     
 class CompanyDriverViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, GenericViewSet):
@@ -30,7 +37,13 @@ class CompanyDriverViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, mix
     permission_classes = [IsProfileOwner]
     
     
-class CompanyViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, GenericViewSet):
+class CompanyViewSet(mixins.ListModelMixin, mixins.CreateModelMixin, mixins.RetrieveModelMixin, mixins.UpdateModelMixin, GenericViewSet, FeedbackMixin):
     serializer_class = CompanySerializer
     queryset = CompanyProfile.objects.all()
     permission_classes = [IsProfileOwner]
+    
+    
+    def get_permissions(self):
+        if self.action == 'rating':
+            return [IsFeedbackOwner()]
+        return super().get_permissions()

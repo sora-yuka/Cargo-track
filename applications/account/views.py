@@ -15,7 +15,7 @@ from applications.profiles.serializers import CompanyDriverSerializer
 from applications.profiles.models import (
     ShipperProfile, DriverProfile, CompanyDriverProfile, CompanyProfile
 )
-from applications.profiles.permissions import IsCompanyUser
+# from applications.profiles.permissions import IsCompanyUser
 
 User = get_user_model()
 
