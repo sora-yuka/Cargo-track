@@ -12,6 +12,9 @@ from django.utils import timezone
 from rest_framework.decorators import action
 from rest_framework import mixins
 from rest_framework.viewsets import GenericViewSet
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 from applications.job.models import Job
 from applications.job.permissions import IsShipper, IsCompanyOrCarrier
@@ -80,7 +83,6 @@ class JobConfirmApiView(APIView):
     def get(self, request, code, pk):
         job = get_object_or_404(Job, pk=pk, activation_code=code)
         job = Job.objects.get(pk=pk, activation_code=code)
-        print(job.pk)
         if not job.is_confirm:
             job.status = 'Delivering'
             job.is_confirm = True
@@ -94,9 +96,13 @@ class JobCompleteApiView(APIView):
     def get(self, request, code, pk):
         job = get_object_or_404(Job, pk=pk, complete_code=code)
         job = Job.objects.get(pk=pk, complete_code=code)
+        driver_profile= DriverProfile.objects.get(user_id=User.objects.get(id=job.driver_id))
+        
         if job.status != 'Completed':
+            driver_profile.status = 'free'
             job.status = 'Completed'
             job.save(update_fields=['status'])
+            driver_profile.save(update_fields=['status'])
             return Response({'message': 'You have successfully completed this job'}, status=status.HTTP_200_OK)
         return Response({'message': 'You already completed this job'}, status=status.HTTP_404_NOT_FOUND)
     
@@ -105,15 +111,18 @@ class JobCanselApiView(APIView):
     def get(self, request, code, pk):
         job = get_object_or_404(Job, pk=pk, cancel_code=code)
         job = Job.objects.get(pk=pk, cancel_code=code)
+        driver_profile= DriverProfile.objects.get(user_id=User.objects.get(id=job.driver_id))
         
         time_since_request = timezone.now() - job.started_at
-        if time_since_request.total_seconds() > 10:
+        if time_since_request.total_seconds() > 30:
             return Response({'message': 'Time to cancel this job has expired'}, status=status.HTTP_404_NOT_FOUND)
              
         if job.is_confirm:
+            driver_profile.status = 'free'
             job.is_confirm = False
             job.status = 'Looking for shipper' 
             job.driver_id = ''
+            driver_profile.save(update_fields=['status'])
             job.save(update_fields=['status', 'is_confirm', 'driver_id'])
             return Response({'message': 'This job was canceled'}, status=status.HTTP_200_OK)
         return Response({'message': 'You have already canceled this job'}, status=status.HTTP_404_NOT_FOUND)

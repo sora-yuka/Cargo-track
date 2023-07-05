@@ -11,7 +11,7 @@ from applications.account.serializers import (
     UserRegisterSerializer, PasswordChangeSerializer,
     ForgotPasswordSerializer, ForgotPasswordConfirmSerializer,
 )
-from applications.profiles.serializers import CompanyDriverSerializer
+# from applications.profiles.serializers import CompanyDriverSerializer
 from applications.profiles.models import (
     ShipperProfile, DriverProfile, CompanyDriverProfile, CompanyProfile
 )
