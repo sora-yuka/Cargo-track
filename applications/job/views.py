@@ -111,21 +111,28 @@ class JobCanselApiView(APIView):
     def get(self, request, code, pk):
         job = get_object_or_404(Job, pk=pk, cancel_code=code)
         job = Job.objects.get(pk=pk, cancel_code=code)
-        driver_profile= DriverProfile.objects.get(user_id=User.objects.get(id=job.driver_id))
         
-        time_since_request = timezone.now() - job.started_at
-        if time_since_request.total_seconds() > 30:
-            return Response({'message': 'Time to cancel this job has expired'}, status=status.HTTP_404_NOT_FOUND)
-             
-        if job.is_confirm:
-            driver_profile.status = 'free'
-            job.is_confirm = False
-            job.status = 'Looking for shipper' 
-            job.driver_id = ''
-            driver_profile.save(update_fields=['status'])
-            job.save(update_fields=['status', 'is_confirm', 'driver_id'])
-            return Response({'message': 'This job was canceled'}, status=status.HTTP_200_OK)
-        return Response({'message': 'You have already canceled this job'}, status=status.HTTP_404_NOT_FOUND)
+        try:
+            time_since_request = timezone.now() - job.started_at
+            if time_since_request.total_seconds() > 30:
+                return Response({'message': 'Time to cancel this job has expired'}, status=status.HTTP_404_NOT_FOUND)
+        except:
+            return Response({'message': 'First you need to confirm this job!'}, status=status.HTTP_404_NOT_FOUND)
+        
+        try:     
+            if job.is_confirm:
+                job.is_confirm = False
+                job.status = 'Looking for shipper' 
+                job.driver_id = ''
+                job.started_at = None
+                driver_profile= DriverProfile.objects.get(user_id=User.objects.get(id=job.driver_id))
+                driver_profile.status = 'free'
+                driver_profile.save(update_fields=['status'])
+                job.save(update_fields=['status', 'is_confirm', 'driver_id', 'started_at'])
+                return Response({'message': 'This job was canceled'}, status=status.HTTP_200_OK)
+            return Response({'message': 'You have already canceled this job'}, status=status.HTTP_404_NOT_FOUND)
+        except:
+            return Response({'message':'Something went wrong with this job'}, status=status.HTTP_404_NOT_FOUND)
     
     
 class JobHistoryViewSet(mixins.ListModelMixin, GenericViewSet):
