@@ -192,5 +192,12 @@ class CompanySerializer(serializers.ModelSerializer):
         
     def to_representation(self, instance):
         rep =  super().to_representation(instance)
+        car_info = CarInfoSerializer(instance.auto_park, many=True).data
         rep['rating'] = instance.cratings.all().aggregate(Avg('rating'))['rating__avg']
+        rep['car'] = []
+        for i in range(len(car_info)):
+            rep['car'].append(car_info[i].get('id'))
+            rep['car'].append(car_info[i].get('brand'))
+            rep['car'].append(car_info[i].get('car_type'))
+            rep['car'].append(car_info[i].get('car_image'))
         return rep
