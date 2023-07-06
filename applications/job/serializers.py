@@ -39,7 +39,7 @@ class JobOfferSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('Sorry, but this job was taken by someone!')
         
         delivery_date = validated_data.get('delivary_date')
-        destination_loaction = validated_data.get('destination_location')
+        destination_location = validated_data.get('destination_location')
         pickup_date = validated_data.get('pickup_date')
         pickup_location = validated_data.get('pickup_location')
         required_equipment = validated_data.get('required_equipment')
@@ -49,8 +49,8 @@ class JobOfferSerializer(serializers.ModelSerializer):
         
         if delivery_date:
             instance.delivery_date = delivery_date
-        if destination_loaction:
-            instance.destination_location = destination_loaction
+        if destination_location:
+            instance.destination_location = destination_location
         if pickup_date:
             instance.pickup_date = pickup_date
         if pickup_location:
@@ -68,7 +68,7 @@ class JobOfferSerializer(serializers.ModelSerializer):
         email_shipper = instance.owner.email
         email_carrier = self.context['request'].user.email
         carrier_id = self.context['request'].user.id
-        # send_email_to_owner.delay(email_shipper, email_carrier)
+        send_email_to_owner.delay(email_shipper, email_carrier)
         send_confirmation_email.delay(email_carrier, instance.activation_code, instance.cancel_code, instance.id)
         
         driver_profile= DriverProfile.objects.get(user_id=User.objects.get(id=carrier_id))
