@@ -17,7 +17,7 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 from applications.job.models import Job
-from applications.job.permissions import IsShipper, IsCompanyOrCarrier
+from applications.job.permissions import HistoryOwner, IsShipper, IsCompanyOrCarrier
 from applications.job.serializers import JobOfferSerializer, JobSerializer
 from applications.profiles.models import BaseProfile, DriverProfile
 
@@ -138,7 +138,7 @@ class JobCanselApiView(APIView):
 class JobHistoryViewSet(mixins.ListModelMixin, GenericViewSet):
     queryset = Job.objects.all()
     serializer_class = JobSerializer
-    permission_classes = []
+    permission_classes = [HistoryOwner]
     
     def get_queryset(self):
         queryset = super().get_queryset()
