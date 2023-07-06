@@ -59,6 +59,7 @@ class CompanyProfile(models.Model):
     insurance_contract = models.TextField(null=True, blank=True)
     insurance_contract_file = models.FileField(upload_to=f"campany contract/contract/{company_name}/", null=True, blank=True)
     phone = PhoneNumberField(blank=True, null=True)
+    bio = models.TextField(blank=True, null=True)
     billing_address = models.CharField(max_length=155, null=True, blank=True)
     mc_dot_number = models.CharField(max_length=10, null=True, blank=True)
     auto_park = models.ManyToManyField(CarInfo, related_name="company_autopark", blank=True)

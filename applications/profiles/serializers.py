@@ -4,6 +4,7 @@ from applications.profiles.models import (
 )
 from applications.feedback.serializers import CRatingSerializer, DRatingSerializer
 from applications.car.serializers import CarInfoSerializer
+from decouple import config
 from django.db.models import Avg
 
 
@@ -117,8 +118,11 @@ class DriverSerializer(serializers.ModelSerializer):
     
     def to_representation(self, instance):
         rep =  super().to_representation(instance)
+        car_info = CarInfoSerializer(instance.car).data
+        car_info['car_image'] = f"http://{config('SERVER_IP')}{car_info.get('car_image')}"
+        car_info['documents_file'] = f"http://{config('SERVER_IP')}{car_info.get('documents_file')}"
         rep['rating'] = instance.dratings.all().aggregate(Avg('rating'))['rating__avg']
-        rep['car_info'] = CarInfoSerializer(instance.car).data
+        rep['car_info'] = car_info
         return rep
     
     
@@ -199,5 +203,5 @@ class CompanySerializer(serializers.ModelSerializer):
             rep['car'].append(car_info[i].get('id'))
             rep['car'].append(car_info[i].get('brand'))
             rep['car'].append(car_info[i].get('car_type'))
-            rep['car'].append(car_info[i].get('car_image'))
+            rep['car'].append(f"http://{config('SERVER_IP')}"+car_info[i].get   ('car_image'))
         return rep
