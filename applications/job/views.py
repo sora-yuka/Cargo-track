@@ -55,7 +55,9 @@ class JobViewSet(ModelViewSet):
                 queryset = super().get_queryset()
                 queryset = queryset.filter(owner=self.request.user)
                 return queryset
-            return super().get_queryset()
+            queryset = super().get_queryset()
+            queryset = queryset.filter(status = 'Looking for shipper')
+            return queryset
         except:
             return super().get_queryset()
     
@@ -86,7 +88,8 @@ class JobConfirmApiView(APIView):
         if not job.is_confirm:
             job.status = 'Delivering'
             job.is_confirm = True
-            job.started_at = timezone.now()
+            job.started_at = timezone.now().strftime("%Y-%m-%dT%H:%M:%S")
+            print(job.started_at)
             job.save(update_fields=['is_confirm', 'status', 'started_at'])
             return Response({'message': 'You have confirmed the order'}, status=status.HTTP_200_OK)
         return Response({'message': 'You have already confirmed the order'}, status=status.HTTP_400_BAD_REQUEST)
@@ -113,7 +116,7 @@ class JobCanselApiView(APIView):
         job = Job.objects.get(pk=pk, cancel_code=code)
         
         try:
-            time_since_request = timezone.now() - job.started_at
+            time_since_request = timezone.now().strftime("%Y-%m-%dT%H:%M:%S") - job.started_at
             if time_since_request.total_seconds() > 30:
                 return Response({'message': 'Time to cancel this job has expired'}, status=status.HTTP_404_NOT_FOUND)
         except:
